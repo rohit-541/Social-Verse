@@ -1,3 +1,8 @@
+import fs from 'fs'
+import path from 'path'
+
+import AppError from "../../Error/Error.js";
+
 export class userModal{
     //Constructor of class
     constructor(name,email,password,ImageUrl){
@@ -23,7 +28,7 @@ export class userModal{
 
     //returns a single user based on id 
     static userbyId(userId){
-        const user = this.usersDb.find(p=>p.id == userId);
+        const user = this.usersDb.find(p=>p.userId == userId);
         return user;
     }
 
@@ -53,24 +58,36 @@ export class userModal{
     }
     
     //updates the detailes of user
-    static updateUser(userID,name,password,Imageurl){
-        const user = this.usersdb.find(p=>p.id == userID);
+    static updateUser(userID,name,password,ImageUrl){
+        const user = this.usersDb.find(p=>p.userId == userID);
         if(user){
             if(name){
-                user.name == name;
+                user.name = name;
             }
             if(password){
-                user.password == password;
+                user.password = password;
             }
+            
+            if(ImageUrl){
 
-            if(Imageurl){
-                user.Imageurl == Imageurl;
+                if(user.ImageUrl){
+                    const prevLoc = path.join(path.resolve(),"public",user.ImageUrl);
+                    console.log(prevLoc);
+                    fs.unlinkSync(prevLoc,(err)=>{
+                        //ToDo: Log this error using winston
+                        console.log("Error while removing file ",err);
+                        throw new Error('Server Error');
+                    })
+                }
+                
+                user.ImageUrl = ImageUrl;
             }
+        }else{
+            throw new AppError(400,"User not found");
         }
-        return user;
     }
 }
 
 //Testing code
-userModal.registerUser("Rohit","rohit@gmail.com","123","url");
+userModal.registerUser("Rohit","rohit@gmail.com","123",null);
 userModal.usersDb[0].userId = "541";

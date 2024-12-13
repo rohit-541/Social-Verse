@@ -9,6 +9,7 @@ import { router as userRouter } from './src/user/routes/user.rourte.js';
 const app = express();
 
 //server configurations
+app.use(express.static('public'));
 app.use(express.json());
 
 //routes
