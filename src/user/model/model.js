@@ -11,6 +11,8 @@ export class userModal{
         this.email = email;
         this.password = password;
         this.ImageUrl = ImageUrl;
+        this.posts = [];
+        this.likedPosts = [];
     }
 
     //container
