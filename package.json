@@ -6,6 +6,7 @@
   "scripts": {
     "test": "start"
   },
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/rohit-541/Social-Verse.git"
@@ -15,5 +16,9 @@
   "bugs": {
     "url": "https://github.com/rohit-541/Social-Verse/issues"
   },
-  "homepage": "https://github.com/rohit-541/Social-Verse#readme"
+  "homepage": "https://github.com/rohit-541/Social-Verse#readme",
+  "dependencies": {
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2"
+  }
 }
