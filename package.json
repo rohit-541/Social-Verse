@@ -1,0 +1,19 @@
+{
+  "name": "social-verse",
+  "version": "1.0.0",
+  "description": "A restfull api application made for social media",
+  "main": "server.js",
+  "scripts": {
+    "test": "start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rohit-541/Social-Verse.git"
+  },
+  "author": "rohit",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rohit-541/Social-Verse/issues"
+  },
+  "homepage": "https://github.com/rohit-541/Social-Verse#readme"
+}
