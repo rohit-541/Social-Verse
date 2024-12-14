@@ -11,6 +11,7 @@ router.get('/userPost',auth,postController.postByUser);
 //post requests
 router.post('/new',auth,uploadPost.single('image'),postController.createPost);
 router.post('/like/:id',auth,postController.likePost);
+router.post('/dislike/:id',auth,postController.dislikePost);
 router.post('/comment/:id',auth,postController.commentPost);
 
 //delete requests

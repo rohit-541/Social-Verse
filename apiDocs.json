@@ -1,0 +1,345 @@
+{
+    "openapi": "3.0.0",
+    "info":{
+        "version":"1.0.0",
+        "description":"An Social media backend made on restfull Api",
+        "title":"Social verse Apis"
+    },
+    "servers":[{
+        "url":"http://localhost:3000",
+        "description":"Main server"
+    }],
+    "components":{
+        "securitySchemes":{
+            "TokenAuth": {
+                "type": "apiKey",
+                "in": "header",
+                "name": "Authorization"
+              }
+        }
+    }, 
+    "paths":{
+        "/user/register":{
+            "post":{
+                "tags":["User"],
+                "summary":"Register user",
+                "description":"Registers new user in in-memory database",
+                "requestBody":{
+                    "description":"User details to register",
+                    "content":{
+                        "multipart/form-data":{
+                            "schema":{
+                                "type":"object",
+                                "properties":{
+                                    "email":{
+                                        "type":"string"
+                                        
+                                    },
+                                    "name":{
+                                        "type":"string"
+                                    },
+                                    "password":{
+                                        "type":"string"
+                                    },
+                                    "ProfileImage":{
+                                        "type":"string",
+                                        "format":"binary"
+                                    }
+                                }
+                            }
+                        }                     
+                    }
+                },
+                "responses":{
+                    "200":{
+                        "description":"OK"
+                    },
+                    "400":{
+                        "description":"Bad Request"
+                    }
+                }
+            }
+        },
+        "/user/login":{
+            "post":{
+                "tags":["User"],
+                "summary":"Login user",
+                "description":"Login user and provide token",
+                "requestBody":{
+                    "description":"User details to login",
+                    "content":{
+                        "application/json":{
+                            "schema":{
+                                "type":"object",
+                                "properties":{
+                                    "email":{
+                                        "type":"string"
+                                        
+                                    },
+                                    "password":{
+                                        "type":"string"
+                                    }
+                                }
+                            }
+                        }                     
+                    }
+                },
+                "responses":{
+                    "200":{
+                        "description":"OK",
+                        "content":{
+                            "application/json":{
+                                "type":"object",
+                                "properties":{
+                                    "success":{
+                                        "type":"string"
+                                    },
+                                    "message":{
+                                        "type":"string"
+                                    },
+                                    "token":{
+                                        "type":"apikey"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400":{
+                        "description":"Bad Request",
+                        "content":{
+                            "application/json":{
+                                "type":"object",
+                                "properties":{
+                                    "success":{
+                                        "type":"object"
+                                    },
+                                    "message":{
+                                        "type":"string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user/detail":{
+            "get":{
+                "tags":["User"],
+                "summary":"Provide user details",
+                "description":"Provide user details whose token is sent",
+                "security":[
+                    {
+                        "TokenAuth":{}
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "description":"OK",
+                        "content":{
+                            "application/json":{
+                                "type":"object",
+                                "properties":{
+                                    "name":{
+                                        "type":"string"
+                                    },
+                                    "email":{
+                                        "type":"string"
+                                    },
+                                    "imageUrl":{
+                                        "type":"string"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401":{
+                        "description":"Unauthorized"
+                    }
+                }
+            }
+        },
+        "/post/":{
+            "get":{
+                "tags":["Post"],
+                "summary":"All post",
+                "description":"Respond with all posts",
+                "responses":{
+                    "200":{
+                        "description":"OK",
+                        "content":{
+                            "application/json":{
+                                "type":"object",
+                                "properties":{
+                                    "postId":{
+                                        "type":"string"
+                                    },
+                                    "title":{
+                                        "type":"string"
+                                    },
+                                    "image":{
+                                        "type":"string"
+                                    },
+                                    "content":{
+                                        "type":"string"
+                                    },
+                                    "postedOn":{
+                                        "type":"string"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401":{
+                        "description":"Unauthorized"
+                    }
+                }
+            }
+        },
+        "/post/new":{
+            "post":{
+                "tags":["Post"],
+                "summary":"Create new post",
+                "description":"Create New Post",
+                "security":[
+                    {
+                        "TokenAuth":{}
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "description":"Post Created Successfully"
+                    },
+                    "401":{
+                        "description":"Unauthorized"
+                    }
+                }
+            }
+        },
+        "/post/like/{id}":{
+            "post":{
+                "tags":["Post"],
+                "summary":"Like post",
+                "description":"Like a post with id as {id}",
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"id",
+                        "required":"true",
+                        "schema":{
+                            "type":"integer",
+                            "minimum":1,
+                            "description":"This is postId which is to be liked"
+                        }
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "description":"OK"
+                    },
+                    "401":{
+                        "description":"Unauthorized"
+                    }
+                }
+            }
+        },
+        "/post/dislike/{id}":{
+            "post":{
+                "tags":["Post"],
+                "summary":"Dislike post",
+                "description":"Dislike a post with id as {id}",
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"id",
+                        "required":"true",
+                        "schema":{
+                            "type":"integer",
+                            "minimum":1,
+                            "description":"This is postId which is to be deleted"
+                        }
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "description":"OK"
+                    },
+                    "401":{
+                        "description":"Unauthorized"
+                    }
+                }
+            }
+        },
+        "/post/comment/{id}":{
+            "post":{
+                "tags":["Post"],
+                "summary":"comment post",
+                "description":"comment on a post with id as {id}",
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"id",
+                        "required":"true",
+                        "schema":{
+                            "type":"integer",
+                            "minimum":1,
+                            "description":"This is postId which is to be deleted"
+                        }
+                    }
+                ],
+                "requestBody":{
+                    "type":"object",
+                    "properties":{
+                        "comment":{
+                            "type":"string"
+                        }
+                    }
+                },
+                "responses":{
+                    "200":{
+                        "description":"OK"
+                    },
+                    "401":{
+                        "description":"Unauthorized"
+                    }
+                }
+            }
+        },
+        "/post/{id}":{
+            "delete":{
+                "tags":["Post"],
+                "summary":"remove post",
+                "description":"remove post with id as {id}",
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"id",
+                        "required":"true",
+                        "schema":{
+                            "type":"integer",
+                            "minimum":1,
+                            "description":"This is postId which is to be deleted"
+                        }
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "description":"OK"
+                    },
+                    "401":{
+                        "description":"Unauthorized"
+                    }
+                }
+            }
+        },
+        "/api-docs":{
+            "get":{
+                "description":"Get all documentation of apis",
+                "tags":["Documentation"]
+            }
+        }
+        
+        
+    }
+
+}

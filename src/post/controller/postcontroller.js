@@ -11,7 +11,7 @@ export class postController{
         const {title,content} = req.body;
         let ImageUrl = null;
         if(req.file){
-            ImageUrl = path.join('uploads','posts',req.file.filename);
+            ImageUrl = path.join('uploads','postImage',req.file.filename);
         }
 
         try{
@@ -42,12 +42,23 @@ export class postController{
         const userId = req.userId;
         const postId = req.params.id;
         try{
-            console.log("hello");
             postModal.likePost(userId,postId);
-            console.log("Liked post");
             res.status(200).send("Liked the post successfully");
         }catch(err){
             res.status(err.statusCode).send(err.message);
+        }
+    }
+
+    //dislike a post
+    static dislikePost = (req,res)=>{
+        const userId = req.userId;
+        const postId = req.params.id;
+
+        try{
+            postModal.dislikePost(postId,userId);
+            res.status(200).send("Post Disliked successfully");
+        }catch(err){
+            throw new AppError(err.statusCode,err.message);
         }
     }
 
@@ -56,8 +67,6 @@ export class postController{
         const userId = req.userId;
         const postId = req.params.id;
         const {comment} = req.body;
-        console.log(req.body);
-        console.log(comment);
         try{
             postModal.comment(userId,postId,comment);
             res.status(200).send("Commented Successfully");
@@ -82,5 +91,6 @@ export class postController{
         const posts = postModal.getAll();
         res.status(200).send(posts);
     }
+
 
 }

@@ -5,12 +5,13 @@ import express from "express";
 import { userController } from "../controller/usercontroller.js";
 import { auth } from "../../Middlewares/Authorization.js";
 import {uploadUser} from "../../Middlewares/FileUploadUser.js";
-
+import { validateRequest } from "../../Middlewares/Validation.user.register.js";
+import { loginvalidateRequest } from "../../Middlewares/login.validation.js";
 export const router = express.Router();
 
 //post routes
-router.post('/login',userController.login);
-router.post('/register',uploadUser.single('ProfileImage'),userController.RegisterUser);
+router.post('/login',loginvalidateRequest,userController.login);
+router.post('/register',uploadUser.single('ProfileImage'),validateRequest,userController.RegisterUser);
 
 //get routes
 router.get('/detail',auth,userController.getDetail);
@@ -21,5 +22,4 @@ router.put('/update',auth,uploadUser.single('ProfileImage'),userController.updat
 //Only test api
 router.get('/secure',auth,(req,res) =>{
     res.send("Secure");
-    console.log(req.userId);
 })

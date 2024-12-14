@@ -74,7 +74,6 @@ export class userModal{
 
                 if(user.ImageUrl){
                     const prevLoc = path.join(path.resolve(),"public",user.ImageUrl);
-                    console.log(prevLoc);
                     fs.unlinkSync(prevLoc,(err)=>{
                         //ToDo: Log this error using winston
                         console.log("Error while removing file ",err);

@@ -1,5 +1,7 @@
 import AppError from "../../Error/Error.js";
 import {userModal}  from "../../user/model/model.js";
+import path from 'path'
+import fs from 'fs'
 
 export class postModal{
 
@@ -80,7 +82,21 @@ export class postModal{
 
         //delete post from userdata and all posts
         userPosts.splice(indexU,1);
+
+        //delete media related to post
+        const postImage = postModal.postsDb[index].image;
+
+        if(postImage){
+            const oldPath = path.join(path.resolve(),"public",postImage);
+            fs.unlink(oldPath,(err)=>{
+                if(err){
+                    console.log("Error ",err);
+                }
+            })
+        }
+
         postModal.postsDb.splice(index,1);
+        
     }
 
     //Returns all post
@@ -128,7 +144,24 @@ export class postModal{
         const comment =
             {"user":userId,"message":Message}
         
-            console.log(comment);
         post.comments.push(comment);
     }
+
+    static dislikePost(postId,userId){
+        //verify if user is valid 
+        const user = userModal.userbyId(userId);
+        if(!user) throw new AppError(401,"User not found!");
+
+        //check if post exists or not 
+        const post = postModal.getbyid(postId);
+        if(!post) throw new AppError(401,"Post not found!");
+
+        const index = user.likedPosts.findIndex(p=>p == postId);
+
+        if(index != -1){
+            post.likesCount--;
+            user.likedPosts.splice(index,1);
+        }
+    }
+
 }
